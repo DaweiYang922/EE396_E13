@@ -1,0 +1,221 @@
+<html>
+<head>
+<title>MainActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,0,255); }
+.s3 { color: rgb(128,128,128); font-style: italic; }
+.s4 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+MainActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.daweiyang.ee396_e13; 
+ 
+</span><span class="s0">import </span><span class="s1">android.Manifest; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.content.pm.PackageManager; 
+</span><span class="s0">import </span><span class="s1">android.database.Cursor; 
+</span><span class="s0">import </span><span class="s1">android.icu.util.Calendar; 
+</span><span class="s0">import </span><span class="s1">android.os.Build; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.provider.CalendarContract; 
+</span><span class="s0">import </span><span class="s1">android.support.v4.app.ActivityCompat; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.widget.AdapterView; 
+</span><span class="s0">import </span><span class="s1">android.widget.ArrayAdapter; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.GridView; 
+</span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+ 
+</span><span class="s0">public class </span><span class="s1">MainActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity { 
+    </span><span class="s0">private static final int </span><span class="s1">SECOND_ACTIVITY_RESULT_CODE = </span><span class="s2">0</span><span class="s1">; 
+    </span><span class="s0">private </span><span class="s1">GridView gridView; 
+    </span><span class="s0">public static </span><span class="s1">ArrayList&lt;String&gt; subData = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+    </span><span class="s0">private </span><span class="s1">TextView monthlyPayment; 
+    </span><span class="s0">private </span><span class="s1">Button addSubscription; 
+    DataBaseHelper myDb; 
+    ArrayAdapter&lt;String&gt; adapter; 
+    </span><span class="s0">float </span><span class="s1">total=</span><span class="s2">0</span><span class="s1">; 
+ 
+    String s_account; 
+    String s_cost; 
+    String s_month; 
+    String s_day; 
+ 
+ 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.activity_main); 
+        monthlyPayment =(TextView) findViewById(R.id.monthlyPayment); 
+        addSubscription= (Button) findViewById(R.id.addSubscription); 
+        gridView = (GridView) findViewById(R.id.GridView); 
+        adapter = </span><span class="s0">new </span><span class="s1">ArrayAdapter&lt;String&gt;(</span><span class="s0">this</span><span class="s1">, 
+                  R.layout.grid_list , subData); 
+        adapter.notifyDataSetChanged(); 
+        myDb = </span><span class="s0">new </span><span class="s1">DataBaseHelper (</span><span class="s0">this</span><span class="s1">); 
+        configure_add_subscription(); 
+</span><span class="s3">//save to database and show in gridview</span><span class="s1"> 
+        Cursor readData = myDb.getAllData(); 
+        </span><span class="s0">while</span><span class="s1">(readData.moveToNext()) { 
+            subData.add(readData.getString(</span><span class="s2">0</span><span class="s1">)); 
+         </span><span class="s3">//   total += Float.parseFloat(readData.getString(1));</span><span class="s1"> 
+        } 
+      </span><span class="s3">//  monthlyPayment.setText(&quot;Monthly Payment: &quot;+String.valueOf(total)+&quot; $&quot;);</span><span class="s1"> 
+        gridView.setAdapter(adapter); 
+        gridView.setOnItemClickListener( 
+                </span><span class="s0">new </span><span class="s1">AdapterView.OnItemClickListener() { 
+                    @Override 
+                    </span><span class="s0">public void </span><span class="s1">onItemClick(AdapterView&lt;?&gt; parent, View view, </span><span class="s0">int </span><span class="s1">position, </span><span class="s0">long </span><span class="s1">id) { 
+                        String item = (String) gridView.getItemAtPosition(position); 
+                        String passValue = </span><span class="s4">&quot; &quot;</span><span class="s1">; 
+                        Cursor readData = myDb.getAllData(); 
+                        readData.moveToFirst(); 
+                        passValue = readData.getString(</span><span class="s2">0</span><span class="s1">) + </span><span class="s4">&quot;;&quot; </span><span class="s1">+ readData.getString(</span><span class="s2">1</span><span class="s1">) + </span><span class="s4">&quot;;&quot; </span><span class="s1">+ 
+                                readData.getString(</span><span class="s2">2</span><span class="s1">) + </span><span class="s4">&quot;;&quot; </span><span class="s1">+ readData.getString(</span><span class="s2">3</span><span class="s1">); 
+                        </span><span class="s0">while</span><span class="s1">(!readData.getString(</span><span class="s2">0</span><span class="s1">).equals(item)){ 
+                            </span><span class="s0">if</span><span class="s1">(readData.isLast()) </span><span class="s0">return</span><span class="s1">; 
+                            readData.moveToNext(); 
+                            passValue = readData.getString(</span><span class="s2">0</span><span class="s1">) + </span><span class="s4">&quot;;&quot; </span><span class="s1">+ readData.getString(</span><span class="s2">1</span><span class="s1">) + </span><span class="s4">&quot;;&quot; </span><span class="s1">+ 
+                                    readData.getString(</span><span class="s2">2</span><span class="s1">) + </span><span class="s4">&quot;;&quot; </span><span class="s1">+ readData.getString(</span><span class="s2">3</span><span class="s1">); 
+                        } 
+                        Intent intent = </span><span class="s0">new </span><span class="s1">Intent(</span><span class="s4">&quot;com.example.daweiyang.ee396_e13.EditSubscription&quot;</span><span class="s1">); 
+                        intent.putExtra(</span><span class="s4">&quot;SUBINFO&quot;</span><span class="s1">, passValue); 
+                        startActivityForResult(intent, SECOND_ACTIVITY_RESULT_CODE); 
+                    } 
+                } 
+        ); 
+ 
+    } 
+    </span><span class="s0">public void </span><span class="s1">onRequestPermissionsResult(</span><span class="s0">int </span><span class="s1">requestCode,  String[] permissions, </span><span class="s0">int</span><span class="s1">[] grantResults) { 
+        </span><span class="s0">switch </span><span class="s1">(requestCode){ 
+            </span><span class="s0">case </span><span class="s2">10</span><span class="s1">: 
+                </span><span class="s3">//button</span><span class="s1"> 
+                add_to_calendar(); 
+                </span><span class="s0">break</span><span class="s1">; 
+            </span><span class="s0">default</span><span class="s1">: 
+                </span><span class="s0">break</span><span class="s1">; 
+        } 
+    } 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onActivityResult(</span><span class="s0">int </span><span class="s1">requestCode, </span><span class="s0">int </span><span class="s1">resultCode, Intent data) { 
+        </span><span class="s0">super</span><span class="s1">.onActivityResult(requestCode, resultCode, data); 
+        </span><span class="s0">if </span><span class="s1">(requestCode == SECOND_ACTIVITY_RESULT_CODE) { 
+            </span><span class="s0">if </span><span class="s1">(resultCode == RESULT_OK) { 
+                adapter.clear(); 
+                gridView.setAdapter(adapter); 
+                ArrayList&lt;String&gt; returnString = data.getStringArrayListExtra(</span><span class="s4">&quot;MESSAGE&quot;</span><span class="s1">); 
+                </span><span class="s0">if </span><span class="s1">(returnString.get(</span><span class="s2">4</span><span class="s1">).equals(</span><span class="s4">&quot;A&quot;</span><span class="s1">) ) { 
+                    myDb.insertData(returnString.get(</span><span class="s2">0</span><span class="s1">) 
+                            , returnString.get(</span><span class="s2">1</span><span class="s1">) 
+                            , returnString.get(</span><span class="s2">2</span><span class="s1">) 
+                            , returnString.get(</span><span class="s2">3</span><span class="s1">)); 
+                    s_account = returnString.get(</span><span class="s2">0</span><span class="s1">); 
+                    s_cost = returnString.get(</span><span class="s2">1</span><span class="s1">); 
+                    s_month = returnString.get(</span><span class="s2">2</span><span class="s1">); 
+                    s_day = returnString.get(</span><span class="s2">3</span><span class="s1">); 
+                    add_to_calendar(); 
+                    </span><span class="s3">//end add</span><span class="s1"> 
+                }</span><span class="s0">else if</span><span class="s1">(returnString.get(</span><span class="s2">4</span><span class="s1">).equals(</span><span class="s4">&quot;D&quot;</span><span class="s1">)){ 
+                    myDb.deleteData(returnString.get(</span><span class="s2">0</span><span class="s1">).replace(</span><span class="s4">&quot;;&quot;</span><span class="s1">,</span><span class="s4">&quot;&quot;</span><span class="s1">)); 
+                    </span><span class="s3">//delete from calendar</span><span class="s1"> 
+ 
+                    </span><span class="s3">//end delete</span><span class="s1"> 
+                }</span><span class="s0">else if</span><span class="s1">(returnString.get(</span><span class="s2">4</span><span class="s1">).equals(</span><span class="s4">&quot;U&quot;</span><span class="s1">)){ 
+                    myDb.updateData(returnString.get(</span><span class="s2">0</span><span class="s1">).replace(</span><span class="s4">&quot;;&quot;</span><span class="s1">,</span><span class="s4">&quot;&quot;</span><span class="s1">) 
+                            , returnString.get(</span><span class="s2">1</span><span class="s1">).replace(</span><span class="s4">&quot;;&quot;</span><span class="s1">, </span><span class="s4">&quot;&quot;</span><span class="s1">) 
+                            , returnString.get(</span><span class="s2">2</span><span class="s1">).replace(</span><span class="s4">&quot;;&quot;</span><span class="s1">, </span><span class="s4">&quot;&quot;</span><span class="s1">) 
+                            , returnString.get(</span><span class="s2">3</span><span class="s1">).replace(</span><span class="s4">&quot;;&quot;</span><span class="s1">, </span><span class="s4">&quot;&quot;</span><span class="s1">)); 
+ 
+                }   </span><span class="s3">//end update</span><span class="s1"> 
+                Cursor readData = myDb.getAllData(); 
+                total = </span><span class="s2">0</span><span class="s1">; 
+                </span><span class="s0">while</span><span class="s1">(readData.moveToNext()) { 
+                    subData.add(readData.getString(</span><span class="s2">0</span><span class="s1">)); 
+                    total += Float.parseFloat(readData.getString(</span><span class="s2">1</span><span class="s1">)); 
+                } 
+                gridView.setAdapter(adapter); 
+                String t = String.format(</span><span class="s4">&quot;%.2f&quot;</span><span class="s1">, total); 
+                monthlyPayment.setText(</span><span class="s4">&quot;Monthly Payment: $&quot;</span><span class="s1">+ String.valueOf(t)); 
+            }</span><span class="s3">//end if resultOK</span><span class="s1"> 
+        } 
+    } 
+ 
+ 
+ 
+ 
+    </span><span class="s0">public void </span><span class="s1">configure_add_subscription(){ 
+ 
+        addSubscription.setOnClickListener( 
+                </span><span class="s0">new </span><span class="s1">View.OnClickListener(){ 
+                    @Override 
+                    </span><span class="s0">public void </span><span class="s1">onClick(View view) { 
+                        Intent intent = </span><span class="s0">new </span><span class="s1">Intent(</span><span class="s4">&quot;com.example.daweiyang.ee396_e13.AddSubscription&quot;</span><span class="s1">); 
+                        startActivityForResult(intent, SECOND_ACTIVITY_RESULT_CODE); 
+                    } 
+ 
+                } 
+        ); 
+    } 
+ 
+ 
+  </span><span class="s0">void </span><span class="s1">add_to_calendar(){ 
+      </span><span class="s0">if </span><span class="s1">(ActivityCompat.checkSelfPermission(</span><span class="s0">this</span><span class="s1">, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED 
+              &amp;&amp; ActivityCompat.checkSelfPermission(</span><span class="s0">this</span><span class="s1">, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) { 
+          </span><span class="s0">if </span><span class="s1">(Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.M) { 
+              requestPermissions(</span><span class="s0">new </span><span class="s1">String[]{Manifest.permission.WRITE_CALENDAR} 
+                      ,</span><span class="s2">10</span><span class="s1">); 
+              requestPermissions(</span><span class="s0">new </span><span class="s1">String[]{Manifest.permission.READ_CALENDAR} 
+                      ,</span><span class="s2">10</span><span class="s1">); 
+          } 
+          </span><span class="s0">return</span><span class="s1">; 
+      } 
+ 
+                      Cursor readData = myDb.getAllData(); 
+                      readData.moveToFirst(); 
+                        </span><span class="s0">while</span><span class="s1">(!readData.isLast()) { 
+ 
+                            </span><span class="s0">int </span><span class="s1">startmonth = Integer.valueOf(s_month); 
+                            </span><span class="s0">int </span><span class="s1">startday = Integer.valueOf(s_day); 
+                            Calendar beginCal = Calendar.getInstance(); 
+                            beginCal.set(</span><span class="s2">2017</span><span class="s1">, startmonth - </span><span class="s2">1</span><span class="s1">, startday); 
+                            </span><span class="s0">long </span><span class="s1">startTime = beginCal.getTimeInMillis(); 
+                            Calendar endCal = Calendar.getInstance(); 
+                            endCal.set(</span><span class="s2">2017</span><span class="s1">, startmonth - </span><span class="s2">1</span><span class="s1">, startday ); 
+                            </span><span class="s0">long </span><span class="s1">endTime = endCal.getTimeInMillis(); 
+                            Intent calIntent = </span><span class="s0">new </span><span class="s1">Intent(Intent.ACTION_INSERT); 
+                            calIntent.setType(</span><span class="s4">&quot;vnd.android.cursor.item/event&quot;</span><span class="s1">); 
+                            calIntent.putExtra(CalendarContract.Events.TITLE, s_account); 
+                            calIntent.putExtra(CalendarContract.Events.DESCRIPTION, </span><span class="s4">&quot;Cost $&quot;</span><span class="s1">+s_cost); 
+                            calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startTime); 
+                            calIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime); 
+                            calIntent.putExtra(CalendarContract.Events.RRULE, </span><span class="s4">&quot;FREQ=MONTHLY&quot;</span><span class="s1">); 
+                            startActivity(calIntent); 
+                            readData.moveToNext(); 
+                        } 
+ 
+  } 
+ 
+ 
+} 
+ 
+ 
+ 
+ 
+ 
+ 
+</span></pre>
+</body>
+</html>

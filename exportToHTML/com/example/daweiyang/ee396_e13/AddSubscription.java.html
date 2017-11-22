@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>AddSubscription.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,0,255); }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+AddSubscription.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.daweiyang.ee396_e13; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.Activity; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.EditText; 
+</span><span class="s0">import </span><span class="s1">android.widget.NumberPicker; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+ 
+ 
+</span><span class="s0">public class </span><span class="s1">AddSubscription </span><span class="s0">extends </span><span class="s1">AppCompatActivity { 
+    EditText account; 
+    EditText monthlyPayment; 
+    EditText passwordHint; 
+    Button saveAccount; 
+    NumberPicker npMonth; 
+    NumberPicker npDay; 
+ 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.activity_add_subscription); 
+        npMonth = (NumberPicker) findViewById(R.id.month); 
+        npMonth.setMaxValue(</span><span class="s2">12</span><span class="s1">); 
+        npMonth.setMinValue(</span><span class="s2">1</span><span class="s1">); 
+        npDay = (NumberPicker) findViewById(R.id.date); 
+        npDay.setMaxValue(</span><span class="s2">28</span><span class="s1">); 
+        npDay.setMinValue(</span><span class="s2">1</span><span class="s1">); 
+        account = (EditText) findViewById(R.id.account); 
+        monthlyPayment = (EditText) findViewById(R.id.monthlyPayment); 
+        saveAccount = (Button) findViewById(R.id.saveAccount); 
+        onClickButtonlistener(); 
+    } 
+ 
+    </span><span class="s0">public void </span><span class="s1">onClickButtonlistener() { 
+        saveAccount.setOnClickListener( 
+            </span><span class="s0">new </span><span class="s1">View.OnClickListener(){ 
+            @Override 
+                </span><span class="s0">public void </span><span class="s1">onClick (View view){ 
+                String month = Integer.toString(npMonth.getValue()); 
+                String day = Integer.toString(npDay.getValue()); 
+                ArrayList&lt;String&gt; message = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+                message.add(account.getText().toString()); 
+                message.add(monthlyPayment.getText().toString()); 
+                message.add(month); 
+                message.add(day); 
+                message.add(</span><span class="s3">&quot;A&quot;</span><span class="s1">); 
+                Intent intent = </span><span class="s0">new </span><span class="s1">Intent(); 
+                intent.putExtra(</span><span class="s3">&quot;MESSAGE&quot;</span><span class="s1">, message); 
+                setResult(Activity.RESULT_OK, intent); 
+                finish(); 
+                } 
+            } 
+        ); 
+    } 
+}</span></pre>
+</body>
+</html>

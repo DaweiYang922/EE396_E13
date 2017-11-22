@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>DBManager.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,0,255); }
+.s4 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+DBManager.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.daweiyang.ee396_e13; 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabase; 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteOpenHelper; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+ 
+</span><span class="s2">/** 
+ * Created by DaweiYang on 10/2/17. 
+ */</span><span class="s1"> 
+ 
+</span><span class="s0">public class </span><span class="s1">DBManager </span><span class="s0">extends </span><span class="s1">SQLiteOpenHelper { 
+ 
+    </span><span class="s0">private static final int </span><span class="s1">DATABASE_VERSION = </span><span class="s3">1</span><span class="s1">; 
+    </span><span class="s0">private static final </span><span class="s1">String TAG = </span><span class="s4">&quot;DATABASES&quot;</span><span class="s1">; 
+ 
+    </span><span class="s0">public </span><span class="s1">DBManager(Context context) { 
+        </span><span class="s0">super</span><span class="s1">(context, </span><span class="s4">&quot;Account1.db&quot;</span><span class="s1">, </span><span class="s0">null</span><span class="s1">, DATABASE_VERSION); 
+ 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onCreate(SQLiteDatabase db) { 
+        Log.v(TAG,</span><span class="s4">&quot;On create Called:&quot;</span><span class="s1">+db.getPath()); 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onUpgrade(SQLiteDatabase db, </span><span class="s0">int </span><span class="s1">oldVersion, </span><span class="s0">int </span><span class="s1">newVersion) { 
+    } 
+} 
+</span></pre>
+</body>
+</html>

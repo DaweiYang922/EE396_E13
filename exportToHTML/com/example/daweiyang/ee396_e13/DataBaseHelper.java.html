@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>DataBaseHelper.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+DataBaseHelper.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.daweiyang.ee396_e13; 
+ 
+ 
+        </span><span class="s0">import </span><span class="s1">android.content.ContentValues; 
+        </span><span class="s0">import </span><span class="s1">android.content.Context; 
+        </span><span class="s0">import </span><span class="s1">android.database.Cursor; 
+        </span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabase; 
+        </span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteOpenHelper; 
+ 
+</span><span class="s2">/** 
+ * Created by ProgrammingKnowledge on 4/3/2015. 
+ */</span><span class="s1"> 
+</span><span class="s0">public class </span><span class="s1">DataBaseHelper </span><span class="s0">extends </span><span class="s1">SQLiteOpenHelper { 
+ 
+    </span><span class="s0">public static final </span><span class="s1">String DATABASE_NAME = </span><span class="s3">&quot;Account1.db&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String TABLE_NAME = </span><span class="s3">&quot;subscription_table&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String COL_1 = </span><span class="s3">&quot;ACCOUNT&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String COL_2 = </span><span class="s3">&quot;COST&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String COL_3 = </span><span class="s3">&quot;MONTH&quot;</span><span class="s1">; 
+    </span><span class="s0">public static final </span><span class="s1">String COL_4 = </span><span class="s3">&quot;DAY&quot;</span><span class="s1">; 
+    </span><span class="s0">public </span><span class="s1">DataBaseHelper(Context context) { 
+        </span><span class="s0">super</span><span class="s1">(context, DATABASE_NAME, </span><span class="s0">null</span><span class="s1">, </span><span class="s4">1</span><span class="s1">); 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onCreate(SQLiteDatabase db) { 
+        db.execSQL(</span><span class="s3">&quot;create table &quot; </span><span class="s1">+ TABLE_NAME +</span><span class="s3">&quot; (ACCOUNT TEXT,COST TEXT,MONTH TEXT, DAY TEXT)&quot;</span><span class="s1">); 
+    } 
+ 
+    @Override 
+    </span><span class="s0">public void </span><span class="s1">onUpgrade(SQLiteDatabase db, </span><span class="s0">int </span><span class="s1">oldVersion, </span><span class="s0">int </span><span class="s1">newVersion) { 
+        db.execSQL(</span><span class="s3">&quot;DROP TABLE IF EXISTS &quot;</span><span class="s1">+TABLE_NAME); 
+        onCreate(db); 
+    } 
+ 
+    </span><span class="s0">public boolean </span><span class="s1">insertData(String account,String cost,String month, String day) { 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+        ContentValues contentValues = </span><span class="s0">new </span><span class="s1">ContentValues(); 
+        contentValues.put(COL_1,account); 
+        contentValues.put(COL_2,cost); 
+        contentValues.put(COL_3,month); 
+        contentValues.put(COL_4,day); 
+        </span><span class="s0">long </span><span class="s1">result = db.insert(TABLE_NAME,</span><span class="s0">null </span><span class="s1">,contentValues); 
+        </span><span class="s0">if</span><span class="s1">(result == -</span><span class="s4">1</span><span class="s1">) 
+            </span><span class="s0">return false</span><span class="s1">; 
+        </span><span class="s0">else</span><span class="s1"> 
+            </span><span class="s0">return true</span><span class="s1">; 
+    } 
+ 
+    </span><span class="s0">public </span><span class="s1">Cursor getAllData() { 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+        Cursor res = db.rawQuery(</span><span class="s3">&quot;select * from &quot;</span><span class="s1">+TABLE_NAME,</span><span class="s0">null</span><span class="s1">); 
+        </span><span class="s0">return </span><span class="s1">res; 
+    } 
+ 
+ 
+    </span><span class="s0">public boolean </span><span class="s1">updateData(String account,String cost,String month, String day) { 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+        ContentValues contentValues = </span><span class="s0">new </span><span class="s1">ContentValues(); 
+        contentValues.put(COL_1,account); 
+        contentValues.put(COL_2,cost); 
+        contentValues.put(COL_3,month); 
+        contentValues.put(COL_4,day); 
+        db.update(TABLE_NAME, contentValues, </span><span class="s3">&quot;Account = ?&quot;</span><span class="s1">,</span><span class="s0">new </span><span class="s1">String[] { account }); 
+        </span><span class="s0">return true</span><span class="s1">; 
+    } 
+ 
+    </span><span class="s0">public </span><span class="s1">Integer deleteData (String account) { 
+        SQLiteDatabase db = </span><span class="s0">this</span><span class="s1">.getWritableDatabase(); 
+        </span><span class="s0">return </span><span class="s1">db.delete(TABLE_NAME, </span><span class="s3">&quot;Account = ?&quot;</span><span class="s1">,</span><span class="s0">new </span><span class="s1">String[] {account}); 
+    } 
+ 
+ 
+}</span></pre>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<html>
+<head>
+<title>EditSubscription.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,128,0); font-weight: bold; }
+.s3 { color: rgb(0,0,255); }
+.s4 { color: rgb(128,128,128); font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+EditSubscription.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">package </span><span class="s1">com.example.daweiyang.ee396_e13; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.Activity; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+ 
+</span><span class="s0">import static </span><span class="s1">com.example.daweiyang.ee396_e13.R.id.account; 
+ 
+</span><span class="s0">public class </span><span class="s1">EditSubscription </span><span class="s0">extends </span><span class="s1">AppCompatActivity { 
+    </span><span class="s0">private </span><span class="s1">TextView ID; 
+    </span><span class="s0">private </span><span class="s1">TextView Day; 
+    </span><span class="s0">private </span><span class="s1">TextView Month; 
+    </span><span class="s0">private </span><span class="s1">TextView MonthlyPayment; 
+    </span><span class="s0">private </span><span class="s1">Button Update; 
+    </span><span class="s0">private </span><span class="s1">Button Delete; 
+ 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setContentView(R.layout.activity_edit_subscription); 
+ 
+        ID = (TextView) findViewById(account); 
+        Day = (TextView) findViewById(R.id.day); 
+        Month = (TextView) findViewById(R.id.month); 
+        MonthlyPayment = (TextView) findViewById(R.id.payment); 
+        Update = (Button) findViewById(R.id.update); 
+        Delete = (Button) findViewById(R.id.delete); 
+        Intent intent = getIntent(); 
+        String SubInfo = intent.getStringExtra(</span><span class="s2">&quot;SUBINFO&quot;</span><span class="s1">); 
+        String[] separated = SubInfo.split(</span><span class="s2">&quot;;&quot;</span><span class="s1">); 
+        String sAccount = separated[</span><span class="s3">0</span><span class="s1">]; 
+        String sMonthlyPayment = separated[</span><span class="s3">1</span><span class="s1">]; 
+        String sMonth = separated[</span><span class="s3">2</span><span class="s1">]; 
+        String sDay = separated[</span><span class="s3">3</span><span class="s1">]; 
+        ID.setText(sAccount); 
+        Month.setText(sMonth); 
+        Day.setText(sDay); 
+        MonthlyPayment.setText(sMonthlyPayment); 
+ 
+        onClickDelete(); 
+        onClickUpdate(); 
+    } 
+    </span><span class="s0">public void </span><span class="s1">onClickDelete() { 
+        Delete.setOnClickListener( 
+                </span><span class="s0">new </span><span class="s1">View.OnClickListener(){ 
+                    @Override 
+                    </span><span class="s0">public void </span><span class="s1">onClick (View view){ 
+                        ArrayList&lt;String&gt; message = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+                        message.add(ID.getText().toString()); 
+                        message.add(Month.getText().toString()); 
+                        message.add(Day.getText().toString()); 
+                        message.add(MonthlyPayment.getText().toString()); 
+                        message.add(</span><span class="s2">&quot;D&quot;</span><span class="s1">); 
+                        Intent intent = </span><span class="s0">new </span><span class="s1">Intent(); 
+                        intent.putExtra(</span><span class="s2">&quot;MESSAGE&quot;</span><span class="s1">, message); 
+                        setResult(Activity.RESULT_OK, intent); 
+                        finish(); 
+                    } 
+                } 
+        ); 
+    } 
+ 
+    </span><span class="s0">public void </span><span class="s1">onClickUpdate() { 
+        Update.setOnClickListener( 
+                </span><span class="s0">new </span><span class="s1">View.OnClickListener(){ 
+                    @Override 
+                    </span><span class="s0">public void </span><span class="s1">onClick (View view){ 
+                        ArrayList&lt;String&gt; message = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+                        message.add(ID.getText().toString()); 
+                        message.add(MonthlyPayment.getText().toString()); 
+                        message.add(Month.getText().toString()); 
+                        message.add(Day.getText().toString()); 
+                        message.add(</span><span class="s2">&quot;U&quot;</span><span class="s1">); 
+                        Intent intent = </span><span class="s0">new </span><span class="s1">Intent(); 
+                        intent.putExtra(</span><span class="s2">&quot;MESSAGE&quot;</span><span class="s1">, message); 
+                        setResult(Activity.RESULT_OK, intent); 
+                        finish(); 
+                    } 
+                } 
+        ); 
+    } 
+}</span><span class="s4">//end class</span></pre>
+</body>
+</html>
